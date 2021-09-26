@@ -22,6 +22,9 @@ const UserSchema = Schema({
     dateLocked: {
         type: Date
     },
+    ipLocked: {
+        type: String
+    },
     state: {
         type: Boolean,
         default: true

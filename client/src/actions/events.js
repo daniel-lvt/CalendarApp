@@ -18,7 +18,6 @@ export const eventStartAddNew = (event) => {
                     _id: uid,
                     name: name
                 }
-                console.log(event)
                 dispatch(eventAddNew(event));
             }
         } catch (error) {
@@ -52,7 +51,6 @@ export const eventStartUpdate = (event) => {
     return async (dispatch) => {
 
         try {
-            console.log(event)
             const resp = await fetchConToken(`events/${event.id}`, event, 'PUT');
             const body = await resp.json();
 
@@ -86,7 +84,6 @@ export const eventStartDelete = () => {
             const body = await resp.json();
 
             if (body.ok) {
-                // no se actualiza directo, revisar
                 dispatch(eventDeleted());
             } else {
                 Swal.fire('Error', body.msg, 'error');

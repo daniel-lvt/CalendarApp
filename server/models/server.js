@@ -24,6 +24,8 @@ class Server {
 
     middlewares() {
 
+        this.app.set('trust proxy', true);
+
         const accessLogStream = rfs.createStream('access.log', {
             interval: '1d',
             path: path.join(__dirname, '../log')
@@ -37,7 +39,8 @@ class Server {
 
     routes() {
         this.app.use('/api/auth', require('../routes/auth'));
-        this.app.use('/api/events',require('../routes/events'))
+        this.app.use('/api/events', require('../routes/events'))
+        this.app.use('/api/users', require('../routes/user'))
     }
 
     listen() {

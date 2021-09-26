@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const { generarJWT } = require("../helpers");
+const intentos = []
 
 const crearUsuario = async (req = request, res = response) => {
 
@@ -59,58 +60,71 @@ const crearUsuario = async (req = request, res = response) => {
 
 const loginUsuario = async (req = request, res = response) => {
 
-    try {
-        const { email, password } = req.body;
 
-        const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'email o contraseña incorrectos'
-            });
-        }
+    const { email, password } = req.body;
 
-        if (!user.state) {
-            return res.status(400).json({
-                ok: false,
-                msg: 'El usuario se encuentra bloqueado, hable con el administrador'
-            });
-        }
+    const user = await User.findOne({ email });
 
-        const validatePassword = bcrypt.compareSync(password, user.password);
-
-        if (!validatePassword) {
-
-            return res.status(400).json({
-                ok: false,
-                msg: 'Contraseña Incorrecta'
-            });
-        }
-
-        const infoJWT = {
-            id: user.id,
-            name: user.name,
-            rol: user.rol
-        }
-
-        const token = await generarJWT(infoJWT)
-
-        res.json({
-            ok: true,
-            uid: user.id,
-            name: user.name,
-            rol: user.rol,
-            token
-        })
-    } catch (error) {
-
-        res.status(500).json({
+    if (!user) {
+        return res.status(400).json({
             ok: false,
-            msg: 'Por favor hable con el administrador'
-        })
-
+            msg: 'email o contraseña incorrectos'
+        });
     }
+
+    if (!user.state) {
+        return res.status(400).json({
+            ok: false,
+            msg: 'El usuario se encuentra bloqueado, hable con el administrador'
+        });
+    }
+
+    const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+    const idxElement = intentos.findIndex(x => x?.email == email);
+
+    const validatePassword = bcrypt.compareSync(password, user.password);
+
+    if (!validatePassword) {
+
+        if (!(idxElement + 1)) {
+            intentos.push({
+                ip,
+                email,
+                numAttemps: 0
+            })
+        }
+
+        if (idxElement + 1) {
+            intentos[idxElement].numAttemps += 1
+        }
+        if (intentos[idxElement]?.numAttemps >= 2) {
+            await User.findByIdAndUpdate(user.id, { state: false, dateLocked: new Date(), ipLocked: intentos[idxElement].ip });
+            intentos.splice(idxElement, 1);
+        }
+
+        return res.status(400).json({
+            ok: false,
+            msg: 'Contraseña Incorrecta'
+        });
+    }
+
+    const infoJWT = {
+        id: user.id,
+        name: user.name,
+        rol: user.rol
+    }
+
+    const token = await generarJWT(infoJWT)
+
+    res.json({
+        ok: true,
+        uid: user.id,
+        name: user.name,
+        rol: user.rol,
+        token
+    })
+
 
 }
 
