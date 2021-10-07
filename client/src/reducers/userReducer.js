@@ -4,6 +4,10 @@ const initialState = {
     usersLocked: {
         users: [],
         isUsers: true
+    },
+    logsInfo: {
+        logs: [],
+        isLogs: true
     }
 }
 
@@ -17,6 +21,16 @@ export const userReducer = (state = initialState, action) => {
                     ...state.usersLocked,
                     users: [action.payload],
                     isUsers: false
+                }
+            }
+
+        case types.userLoadedLogs:
+            return {
+                ...state,
+                logsInfo: {
+                    ...state.logsInfo,
+                    logs: [action.payload],
+                    isLogs: false
                 }
             }
 

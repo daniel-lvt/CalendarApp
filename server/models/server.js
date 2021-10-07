@@ -4,6 +4,8 @@ const rfs = require('rotating-file-stream');
 const path = require('path');
 const morgan = require('morgan');
 const { dbConnection } = require('../database/config');
+const { ipAddres } = require('../utils/dataIp');
+const { dateNow } = require('../utils/time');
 
 class Server {
 
@@ -31,7 +33,15 @@ class Server {
             path: path.join(__dirname, '../log')
         });
 
-        this.app.use(morgan('combined', { stream: accessLogStream }));
+
+        morgan.token('user', (req) => {
+            const info = req?.name + '-'+req?.rol+'-' + req?.uid;
+            return info;
+        })
+        morgan.token('ip', () => (ipAddres()));
+        morgan.token('time', () => (dateNow()))
+
+        this.app.use(morgan('User [:user],Date [:time],Method[:method],Url[:url],Status[:status],Time[:response-time ms],Ip[:ip]', { stream: accessLogStream }));
 
         this.app.use(cors());
         this.app.use(express.json());
@@ -39,8 +49,9 @@ class Server {
 
     routes() {
         this.app.use('/api/auth', require('../routes/auth'));
-        this.app.use('/api/events', require('../routes/events'))
-        this.app.use('/api/users', require('../routes/user'))
+        this.app.use('/api/events', require('../routes/events'));
+        this.app.use('/api/users', require('../routes/user'));
+        this.app.use('/api/config', require('../routes/config'));
     }
 
     listen() {

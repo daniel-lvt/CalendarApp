@@ -23,7 +23,7 @@ const crearUsuario = async (req = request, res = response) => {
             name,
             email,
             password,
-            rol: 'ADMIN_ROLE'
+            rol: 'USER_ROLE'
         }
 
         const newUser = new User(newUserObject);
@@ -157,7 +157,10 @@ const updatedPassword = async (req, res = response) => {
 
 const revalidarToken = async (req, res = response) => {
 
-    const { uid, name } = req;
+    const { uid, name, id } = req;
+    console.log(id)
+    console.log(uid)
+    console.log(name)
     const data = { uid, name };
     const token = await generarJWT(data);
     res.json({

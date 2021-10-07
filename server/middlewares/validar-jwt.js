@@ -11,13 +11,12 @@ const validarJWT = (req, res = response, next) => {
         });
     }
     try {
-
-        const { id, name, rol } = jwt.verify(
+        const { id, name, rol, user } = jwt.verify(
             token,
             process.env.SECRET_JWT_SEED
         );
 
-        req.uid = id;
+        req.uid = id || user;
         req.name = name;
         req.rol = rol;
 

@@ -10,6 +10,8 @@ export const TableUserBlock = () => {
     const dispatch = useDispatch();
     const { usersLocked: { users, isUsers } } = useSelector(state => state.user)
 
+    // useMemo(() =>  input)
+
     useEffect(() => {
         dispatch(loadInformationUserLockeds())
     }, [dispatch])
@@ -21,7 +23,7 @@ export const TableUserBlock = () => {
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>
-        )
+        );
     } else {
 
         const data = users[0];

@@ -29,3 +29,30 @@ export const updatedInformationUser = (id) => {
         }
     }
 }
+
+export const updatedTimeSesion = (time) => {
+    return async () => {
+        const resp = await fetchConToken('config', time, 'POST', 'ADMIN_ROLE');
+        const body = await resp.json();
+        if (body?.ok) {
+            Swal.fire('Aviso', body.msg, 'success');
+        }
+    }
+}
+
+export const loadInformationLogs = () => {
+    return async (dispatch) => {
+        const resp = await fetchConToken('config', undefined, 'GET', 'ADMIN_ROLE');
+        const body = await resp.json();
+        if (body?.ok) {
+            dispatch(informationLogs(body?.data));
+        }
+    }
+}
+
+const informationLogs = (information) => {
+    return {
+        type: types.userLoadedLogs,
+        payload: information
+    }
+}

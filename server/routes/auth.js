@@ -44,7 +44,7 @@ router.use(validarRol)
 router.put(
     '/',
     [
-        check('password', 'La contraseña esobligatoria').not().isEmpty(),
+        check('password', 'La contraseña es obligatoria').not().isEmpty(),
         check('password').custom(value => validatePassword(value)),
         validarCampos
     ],

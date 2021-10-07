@@ -7,16 +7,16 @@ const { isDate } = require('../helpers/isDate');
 
 const router = Router();
 
-router.use(validarJWT);
 
-router.get('/', getEventos);
+router.get('/', validarJWT, getEventos);
 
 router.post('/',
     [
         check('title', 'El titulo es obligatorio').not().isEmpty(),
         check('start', 'Fecha de inicio es obligatoria').custom(isDate),
         check('end', 'Fecha de inicio es obligatoria').custom(isDate),
-        validarCampos
+        validarCampos,
+        validarJWT
     ],
     crearEvento);
 
@@ -25,11 +25,12 @@ router.put('/:id',
         check('title', 'El titulo es obligatorio').not().isEmpty(),
         check('start', 'Fecha de inicio es obligatoria').custom(isDate),
         check('end', 'Fecha de inicio es obligatoria').custom(isDate),
-        validarCampos
+        validarCampos,
+        validarJWT
     ],
     actualizarEvento);
 
-router.delete('/:id', eliminarEvento);
+router.delete('/:id', validarJWT, eliminarEvento);
 
 module.exports = router;
 

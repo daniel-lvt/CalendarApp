@@ -20,4 +20,5 @@ export const types = {
     authLogout: "[auth] Logout",
 
     userLoaded: '[user] User Locked loaded',
+    userLoadedLogs: '[user] User Logs loaded',
 }

@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
 
-const generarJWT = (information) => {
+const generarJWT = (information, expiresIn = '15000') => {
     return new Promise((resolve, reject) => {
         const payload = information;
         jwt.sign(payload, process.env.SECRET_JWT_SEED, {
-            expiresIn: '1hr'
+            expiresIn
         }, (err, token) => {
             if (err) {
                 console.log(err)

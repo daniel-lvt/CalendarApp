@@ -14,9 +14,9 @@ const getEventos = async (req, res = response) => {
 
 const crearEvento = async (req, res = response) => {
 
-    const evento = new Event(req.body);
-
     try {
+    
+        const evento = new Event(req.body);
 
         evento.user = req.uid;
         const eventoDB = await evento.save()

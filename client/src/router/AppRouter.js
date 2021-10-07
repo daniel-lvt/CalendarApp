@@ -13,33 +13,30 @@ export const AppRouter = () => {
 
     const dispatch = useDispatch();
 
-    const { cheking, uid } = useSelector(state => state.auth)
+    const { uid } = useSelector(state => state.auth)
 
     useEffect(() => {
         dispatch(startCheking());
     }, [dispatch]);
 
-    if (cheking) {
-        return (<h5>Espere ...</h5>);
-    } else {
-        return (
-            <Router>
-                <div>
-                    <Switch>
-                        <PublicRoute
-                            isAuthenticated={!!uid}
-                            path="/login"
-                            component={LoginScreen}
-                            exact
-                        />
-                        <PrivateRoute
-                            isAuthenticated={!!uid}
-                            path='/'
-                            exact
-                        />
-                    </Switch>
-                </div>
-            </Router>
-        )
-    }
+    return (
+        <Router>
+            <div>
+                <Switch>
+                    <PublicRoute
+                        isAuthenticated={!!uid}
+                        path="/login"
+                        component={LoginScreen}
+                        exact
+                    />
+                    <PrivateRoute
+                        isAuthenticated={!!uid}
+                        path='/'
+                        exact
+                    />
+                </Switch>
+            </div>
+        </Router>
+    )
+
 }

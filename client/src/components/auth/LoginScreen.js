@@ -7,6 +7,7 @@ import validator from 'validator';
 import './login.css';
 
 //Cuenta12345#$
+//Cuenta1234#$
 
 export const LoginScreen = () => {
 
@@ -22,7 +23,6 @@ export const LoginScreen = () => {
         rEmail: '',
         rPassword1: "",
         rPassword2: "",
-
     });
 
     const { lEmail, lPassword } = formLoginValues;

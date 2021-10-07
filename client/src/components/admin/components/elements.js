@@ -28,3 +28,28 @@ export const elements = [
         name: '6 hr'
     },
 ];
+
+
+export const valueCheck = [
+    {
+        value: '60000'
+    },
+    {
+        value: '180000'
+    },
+    {
+        value: '600000'
+    },
+    {
+        value: '1800000'
+    },
+    {
+        value: '1h'
+    },
+    {
+        value: '3h'
+    },
+    {
+        value: '6h'
+    },
+]

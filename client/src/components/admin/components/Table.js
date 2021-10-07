@@ -6,7 +6,7 @@ import { TableUserBlock } from './TableUserBlock';
 export const Table = () => {
     return (
         <>
-            <div class="alert alert-secondary" role="alert">
+            <div className="alert alert-secondary" role="alert">
                 Acceso
             </div>
             <div className="card mb-5">

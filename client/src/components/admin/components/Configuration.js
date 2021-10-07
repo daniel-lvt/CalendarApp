@@ -1,10 +1,11 @@
 import React from 'react'
 import Swal from 'sweetalert2';
 import { useForm } from '../../../hooks/useForm';
-import { elements } from './elements';
+import { elements, valueCheck } from './elements';
 import validator from 'validator';
 import { useDispatch, useSelector } from 'react-redux';
 import { startUpdatedPassword } from '../../../actions/auth';
+import { updatedTimeSesion } from '../../../actions/users';
 
 export const Configuration = () => {
 
@@ -31,7 +32,10 @@ export const Configuration = () => {
             confirmButtonText: 'Si, Aceptar!'
         }).then((result) => {
             if (result.isConfirmed) {
-
+                const information = {
+                    expireIn: valueCheck[valueSelect - 1].value
+                }
+                dispatch(updatedTimeSesion(information));
             }
         })
     }

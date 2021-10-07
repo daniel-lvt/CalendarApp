@@ -8,9 +8,13 @@ export const eventStartAddNew = (event) => {
 
         const { uid, name } = getState().auth;
         try {
-
             const resp = await fetchConToken('events', event, 'POST');
             const body = await resp.json();
+
+            if (!body.ok) {
+                window.location.reload('/login')
+                Swal.fire('Aviso','El tiempo de sesion ha caducado', 'warning');
+            }
 
             if (body.ok) {
                 event.id = body.evento.id;
@@ -53,7 +57,10 @@ export const eventStartUpdate = (event) => {
         try {
             const resp = await fetchConToken(`events/${event.id}`, event, 'PUT');
             const body = await resp.json();
-
+            if (!body.ok) {
+                window.location.reload('/login')
+                Swal.fire('Aviso','El tiempo de sesion ha caducado', 'warning');
+            }
             if (body.ok) {
                 // no se actualiza directo, revisar
                 dispatch(eventUpdated(event));
@@ -82,7 +89,10 @@ export const eventStartDelete = () => {
             const { id } = getState().calendar.activeEvent;
             const resp = await fetchConToken(`events/${id}`, {}, 'DELETE');
             const body = await resp.json();
-
+            if (!body.ok) {
+                window.location.reload('/login')
+                Swal.fire('Aviso','El tiempo de sesion ha caducado', 'warning');
+            }
             if (body.ok) {
                 dispatch(eventDeleted());
             } else {
@@ -105,7 +115,10 @@ export const eventsStartLoading = () => {
     return async (dispatch) => {
         const resp = await fetchConToken('events');
         const body = await resp.json();
-
+        if (!body.ok) {
+            window.location.reload('/login');
+            Swal.fire('Aviso','El tiempo de sesion ha caducado', 'warning');
+        }
         const events = prepareEvents(body.events)
 
         dispatch(eventLoaded(events))
